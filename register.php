@@ -3,7 +3,7 @@
  * register.php
  * @author Fabian Huber
  * 30.08.2018
- * Register users
+ * Register users      
  */
 session_start();
 
