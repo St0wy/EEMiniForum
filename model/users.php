@@ -29,7 +29,7 @@ function getUsers()
  * @param int $idUser ID de l'utilsateur dont on veut le détail
  * @return array|NULL
  */
-function getUser($idUser)
+function getUserFromId($idUser)
 {
     $db = connectDb();
     $sql = "SELECT idUser, login, name, surname FROM users WHERE idUser = :idUser";
@@ -37,6 +37,56 @@ function getUser($idUser)
     $request->execute(array('idUser' => $idUser));
 
     return $request->fetch();
+}
+
+/**
+ * ajoute un enregistrement à la table users
+ * @param string $surname nom de la personne
+ * @param string $name prénom de la personne
+ * @param string $login pseudo de l'utilisateur
+ * @param string $password Mot de passe en clair de l'utilisateur
+ * @return int numéro de l'enregistrement créé
+ */
+function addUser($surname, $name, $login, $password)
+{
+    if (!userExist($login)) {
+        try {
+            $db = connectDb();
+            $sql = "INSERT INTO users (surname, name, login, password) VALUES (:surname, :name, :login, :password)";
+            $request = $db->prepare($sql);
+            if ($request->execute(array(
+                'surname' => $name,
+                'name' => $name,
+                'login' => $login,
+                'password' => sha1($password),
+            ))) {
+                return $db->lastInsertId();
+            } else {
+                return null;
+            }
+        } catch (Exeption $e) {
+            echo $e->getMessage();
+            return null;
+        }
+    }
+
+    return $request->fetch();
+}
+
+function userExist($login)
+{
+    $db = connectDb();
+    $sql = "SELECT login WHERE login = :login";
+    $request = $db->prepare($sql);
+    $request->execute(array(
+        'login' => $login,
+    ));
+    if ($request->execute(array('login' => $login))) {
+        return true;
+    } else {
+        return false;
+    }
+
 }
 
 /**
@@ -49,7 +99,7 @@ function getUser($idUser)
 function checkUserIdentification($login, $password)
 {
     $db = connectDb();
-    $sql = "SELECT login, password FROM users WHERE login = :login AND password = :password";
+    $sql = "SELECT idUser, login, name, surname FROM users WHERE login = :login AND password = :password";
 
     $request = $db->prepare($sql);
     if ($request->execute(array(

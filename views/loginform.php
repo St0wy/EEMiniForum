@@ -8,6 +8,8 @@
 
 $pageTitle = "Identification";
 include "views/header.php";
+require_once 'model/flashMessage.php';
+
 ?>
 
 <form class="" action="index.php" method="post">
@@ -24,18 +26,13 @@ include "views/header.php";
 		</fieldset>
 	</form>
 	<?php
-if ($error) {
+if (isset($errors["login"])) {
     ?>
-		<p> Cefo </p>
-		<?php
-}
-if (isset($_SESSION["username"])) {
-    ?>
-		<p>t'es co</p>
+		<p class="error"> <?php echo $errors["login"]; ?> </p>
 		<?php
 }
 ?>
-
+	<p><?php echo GetMessageFlash(); ?></p>
 	<a href="./register.php">Pas encore inscrit?</a>
     <?php
 include "views/footer.php";

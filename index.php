@@ -6,6 +6,10 @@
  * Connection page
  */
 
+if (session_status() !== PHP_SESSION_ACTIVE) {
+    session_start();
+}
+
 require_once 'model/users.php';
 
 $errors = array();
@@ -16,7 +20,7 @@ if (filter_has_var(INPUT_POST, "submit")) {
 	
 	$result = checkUserIdentification($username, $password);
     if (empty($result)) {
-		$errors['Login'] = 'Identification ou mot de passe invalide';
+		$errors['login'] = 'Identification ou mot de passe invalide';
     } else {
         $_SESSION['user'] = $result;
         header("location:confirmation.php");
@@ -24,5 +28,5 @@ if (filter_has_var(INPUT_POST, "submit")) {
     }
 }
 
-include 'views/loginform.php';
+include 'views/loginForm.php';
 
