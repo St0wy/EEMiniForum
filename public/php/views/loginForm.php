@@ -13,18 +13,15 @@ require_once 'model/flashMessage.php';
 ?>
 
 <form class="" action="index.php" method="post">
-		<fieldset>
-			<legend>Connexion</legend>
-
-			<label for="username">Identifiant:</label><br>
-			<input type="text" name="username" id="username"><br>
-			<label for="password">Mot de passe:</label><br>
-			<input type="text" name="password" id="password"><br>
-
-
-			<input type="submit" name="submit" >
-		</fieldset>
-	</form>
+	<fieldset>
+		<legend>Connexion</legend>
+		<label for="username">Identifiant:</label><br>
+		<input type="text" name="username" id="username"><br>
+		<label for="password">Mot de passe:</label><br>
+		<input type="text" name="password" id="password"><br>
+		<input type="submit" name="submit" >
+	</fieldset>
+</form>
 	<?php
 if (isset($errors["login"])) {
     ?>
