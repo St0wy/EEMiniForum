@@ -55,7 +55,7 @@ function addUser($surname, $name, $login, $password)
             $sql = "INSERT INTO users (surname, name, login, password) VALUES (:surname, :name, :login, :password)";
             $request = $db->prepare($sql);
             if ($request->execute(array(
-                'surname' => $name,
+                'surname' => $surname,
                 'name' => $name,
                 'login' => $login,
                 'password' => sha1($password),
@@ -75,18 +75,24 @@ function addUser($surname, $name, $login, $password)
 
 function userExist($login)
 {
-    $db = connectDb();
-    $sql = "SELECT login WHERE login = :login";
-    $request = $db->prepare($sql);
-    $request->execute(array(
-        'login' => $login,
-    ));
-    if ($request->execute(array('login' => $login))) {
-        return true;
-    } else {
+    try {
+        $db = connectDb();
+        $sql = "SELECT login FROM users WHERE login = :login";
+        $request = $db->prepare($sql);
+        if ($request->execute(array('login' => $login))) {
+            $result = $request->fetch(PDO::FETCH_ASSOC);
+            if (isset($result['login'])) {
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
+    } catch (Exeption $e) {
+        echo $e->getMessage();
         return false;
     }
-
 }
 
 /**
