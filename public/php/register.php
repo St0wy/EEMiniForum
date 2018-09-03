@@ -23,30 +23,33 @@ if (filter_has_var(INPUT_POST, "submit")) {
     }
     if (strlen($name) <= 0) {
         $errors["register"]["name"] = "Vous devez donner un prenom.";
-        $name="";
+        $name = "";
     } else if (strlen($name) > 50) {
         $errors["register"]["name"] = "Le prenom ne doit pas depasser 50 caractere.";
-        $name="";
+        $name = "";
     }
     if (strlen($username) <= 0) {
         $errors["register"]["username"] = "Vous devez donner un identifiant.";
-        $username="";
+        $username = "";
     } else if (strlen($username) > 50) {
         $errors["register"]["username"] = "Le pseudo ne doit pas depasser 50 caractere.";
-        $username="";
+        $username = "";
     }
     if (strlen($surname) <= 0) {
         $errors["register"]["surname"] = "Vous devez donner un nom.";
-        $surname="";
+        $surname = "";
     } else if (strlen($surname) > 50) {
         $errors["register"]["surname"] = "Le nom ne doit pas depasser 50 caractere.";
-        $surname="";
+        $surname = "";
     }
     if (empty($errors["register"])) {
-        addUser($surname, $name, $username, $password);
-        SetMessageFlash("Vous etes bien inscrits");
-        header("location:index.php");
-        exit;
+        if (empty(addUser($surname, $name, $username, $password))) {
+            $errors["register"]["sql"] = "Probleme avec l'enregistrement de l'utilisateur.";
+        } else {
+            SetMessageFlash("Vous etes bien inscrits");
+            header("location:index.php");
+            exit;
+        }
     }
 
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * model\user.php
+ * php\model\user.php
  * @author Fabian Huber
  * 31.08.2018
  * fonctions de gestions de la table users
@@ -26,15 +26,15 @@ function getUsers()
 /**
  * retourne les données de l'enregistrement idUser
  * Les données à récupérer sont l'id, le nom, le prénom, le pseudo, la date d'enregistrement et le statut admin
- * @param int $idUser ID de l'utilsateur dont on veut le détail
+ * @param string $login ID de l'utilsateur dont on veut le détail
  * @return array|NULL
  */
-function getUserFromId($idUser)
+function getUserFromLogin($login)
 {
     $db = connectDb();
-    $sql = "SELECT idUser, login, name, surname FROM users WHERE idUser = :idUser";
+    $sql = "SELECT idUser, login, name, surname FROM users WHERE login = :login";
     $request = $db->prepare($sql);
-    $request->execute(array('idUser' => $idUser));
+    $request->execute(array('login' => $login));
 
     return $request->fetch();
 }
