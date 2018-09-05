@@ -67,12 +67,16 @@ function GetPostFromId($idNews){
     }
 }
 
-function EditPost($idNews, $title, $description){
+function UpdatePost($idNews, $title, $description){
     try {
         $db = connectDb();
-        $sql = "UPDATE news SET ";
+        $sql = "UPDATE news SET title = :title, description = :description, lastEditDate = :lastEditDate WHERE idNews = :idNews";
         $request = $db->prepare($sql);
-        if ($request->execute(array("idNews" => $idNews))) {
+        if ($request->execute(array(
+            "title" => $title,
+            "description" => $description,
+            "lastEditDate" => strtotime("now"),
+            "idNews" => $idNews))) {
             $result = $request->fetchAll(PDO::FETCH_ASSOC);
             return $result;
         } else {

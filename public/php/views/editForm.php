@@ -8,6 +8,18 @@
 
 $pageTitle = "Mise a jour d'une nouvelle";
 include "views/header.php";
+require_once 'model/flashMessage.php';
+
+?>
+<p><?php echo GetMessageFlash(); ?></p>
+<?php 
+if(isset($errors)){
+    foreach ($errors as $error) {
+        ?>
+        <p class="error"><?php echo $error; ?></p>
+        <?php
+    }
+}
 ?>
 <form class="" action=".\editNews.php" method="post">
 	<fieldset>
