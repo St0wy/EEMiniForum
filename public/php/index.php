@@ -1,6 +1,6 @@
 <?php
 /**
- * index.php
+ * php\index.php
  * @author Fabian Huber
  * 30.08.2018
  * Connection page

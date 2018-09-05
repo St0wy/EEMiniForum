@@ -30,13 +30,49 @@ function savePost($title, $description, $idUser)
     return $request->fetch();
 }
 
-function getPost($idUser)
+function GetPosts()
 {
     try {
         $db = connectDb();
-        $sql = "SELECT idNews, title, description FROM news WHERE idUser = :idUser";
+        $sql = "SELECT idNews, title, description, idUser, creationDate, lastEditDate FROM news";
         $request = $db->prepare($sql);
-        if ($request->execute(array('idUser' => $idUser))) {
+        if ($request->execute()) {
+            $result = $request->fetchAll(PDO::FETCH_ASSOC);
+            return $result;
+        } else {
+            return null;
+        }
+    } catch (Exeption $e) {
+
+        echo $e->getMessage();
+        return null;
+    }
+}
+
+function GetPostFromId($idNews){
+    try {
+        $db = connectDb();
+        $sql = "SELECT idNews, title, description, idUser, creationDate, lastEditDate FROM news WHERE idNews = :idNews";
+        $request = $db->prepare($sql);
+        if ($request->execute(array("idNews" => $idNews))) {
+            $result = $request->fetchAll(PDO::FETCH_ASSOC);
+            return $result;
+        } else {
+            return null;
+        }
+    } catch (Exeption $e) {
+
+        echo $e->getMessage();
+        return null;
+    }
+}
+
+function EditPost($idNews, $title, $description){
+    try {
+        $db = connectDb();
+        $sql = "UPDATE news SET ";
+        $request = $db->prepare($sql);
+        if ($request->execute(array("idNews" => $idNews))) {
             $result = $request->fetchAll(PDO::FETCH_ASSOC);
             return $result;
         } else {

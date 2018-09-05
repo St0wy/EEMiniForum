@@ -26,15 +26,31 @@ function getUsers()
 /**
  * retourne les données de l'enregistrement idUser
  * Les données à récupérer sont l'id, le nom, le prénom, le pseudo, la date d'enregistrement et le statut admin
- * @param string $login ID de l'utilsateur dont on veut le détail
+ * @param string $login login de l'utilsateur dont on veut le détail
  * @return array|NULL
  */
-function getUserFromLogin($login)
+function GetUserFromLogin($login)
 {
     $db = connectDb();
     $sql = "SELECT idUser, login, name, surname FROM users WHERE login = :login";
     $request = $db->prepare($sql);
     $request->execute(array('login' => $login));
+
+    return $request->fetch();
+}
+
+/**
+ * retourne les données de l'enregistrement idUser
+ * Les données à récupérer sont l'id, le nom, le prénom, le pseudo, la date d'enregistrement et le statut admin
+ * @param string $idUSer ID de l'utilsateur dont on veut le détail
+ * @return array|NULL
+ */
+function GetUserFromId($idUser)
+{
+    $db = connectDb();
+    $sql = "SELECT idUser, login, name, surname FROM users WHERE idUser = :idUser";
+    $request = $db->prepare($sql);
+    $request->execute(array('idUser' => $idUser));
 
     return $request->fetch();
 }

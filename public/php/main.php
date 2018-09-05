@@ -1,6 +1,6 @@
 <?php
 /**
- * index.php
+ * php\main.php
  * @author Fabian Huber
  * 03.09.2018
  * Main page of the site
