@@ -29,3 +29,22 @@ function savePost($title, $description, $idUser)
 
     return $request->fetch();
 }
+
+function getPost($idUser)
+{
+    try {
+        $db = connectDb();
+        $sql = "SELECT idNews, title, description FROM news WHERE idUser = :idUser";
+        $request = $db->prepare($sql);
+        if ($request->execute(array('idUser' => $idUser))) {
+            $result = $request->fetchAll(PDO::FETCH_ASSOC);
+            return $result;
+        } else {
+            return null;
+        }
+    } catch (Exeption $e) {
+
+        echo $e->getMessage();
+        return null;
+    }
+}

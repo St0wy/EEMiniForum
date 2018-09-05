@@ -1,6 +1,6 @@
 <?php
 /**
- * model\flashMessage.php
+ * php\model\flashMessage.php
  * @author Fabian Huber
  * 31.08.2018
  * Message flash qui apparaissent pour confirmer des trucs
