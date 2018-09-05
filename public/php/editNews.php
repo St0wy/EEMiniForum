@@ -26,6 +26,8 @@ if($user["idUser"] !== $news["idUser"]){
 if(filter_has_var(INPUT_POST, "edit")){
     $title = filter_input(INPUT_POST, 'title', FILTER_SANITIZE_STRING);
     $description = filter_input(INPUT_POST, 'description', FILTER_SANITIZE_STRING);
+    $idNews = filter_input(INPUT_POST, 'idNews', FILTER_VALIDATE_INT);
+    $news = GetPostFromId($idNews);
 
     if(empty($title)){
         $errors["title"] = "Votre titre ne doit pas etre vide.";

@@ -49,12 +49,12 @@ foreach ($posts as $post) {
 	<h1><?php echo $post["title"]; ?></h1>
 	<p><?php echo $post["description"]; ?></p>
 	<?php
-	if ($user["idUser"] == $post["idUser"]) {
-    ?>
+if ($user["idUser"] == $post["idUser"]) {
+        ?>
 	<a href="editNews.php?idNews=<?php echo $post["idNews"]; ?>&action=edit">Modifier</a>
 	<a href="editNews.php?idNews=<?php echo $post["idNews"]; ?>&action=delete">Supprimer</a>
 	<?php
-	}
+}
 }
 
 include "views/footer.php";

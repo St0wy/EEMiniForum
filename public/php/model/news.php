@@ -49,25 +49,27 @@ function GetPosts()
     }
 }
 
-function GetPostFromId($idNews){
+function GetPostFromId($idNews)
+{
     try {
         $db = connectDb();
         $sql = "SELECT idNews, title, description, idUser, creationDate, lastEditDate FROM news WHERE idNews = :idNews";
         $request = $db->prepare($sql);
         if ($request->execute(array("idNews" => $idNews))) {
-            $result = $request->fetchAll(PDO::FETCH_ASSOC);
+            $result = $request->fetchAll(PDO::FETCH_ASSOC)[0];
             return $result;
         } else {
             return null;
         }
-    } catch (Exeption $e) {
-
+    } 
+    catch (Exeption $e) {
         echo $e->getMessage();
         return null;
     }
 }
 
-function UpdatePost($idNews, $title, $description){
+function UpdatePost($idNews, $title, $description)
+{
     try {
         $db = connectDb();
         $sql = "UPDATE news SET title = :title, description = :description, lastEditDate = :lastEditDate WHERE idNews = :idNews";
