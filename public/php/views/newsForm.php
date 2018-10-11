@@ -41,7 +41,7 @@ $posts = GetPosts();
 foreach ($posts as $post) {
     $user = GetUserFromId($post["idUser"]);
     ?>
-	<p>Auteur: <?php echo $user["name"] . $user["surname"]; ?></p>
+	<p>Auteur: <?php echo $user["name"] . " " . $user["surname"]; ?></p>
 	<p>
 		Posté le <?php echo date("d.m.o", strtotime($post["creationDate"])); ?> a <?php echo date("G:i", strtotime($post["creationDate"])); ?>.
 		Derniere modification le <?php echo date("d.m.o", strtotime($post["lastEditDate"])); ?> a <?php echo date("H:i", strtotime($post["lastEditDate"])); ?>

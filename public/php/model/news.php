@@ -56,13 +56,12 @@ function GetPostFromId($idNews)
         $sql = "SELECT idNews, title, description, idUser, creationDate, lastEditDate FROM news WHERE idNews = :idNews";
         $request = $db->prepare($sql);
         if ($request->execute(array("idNews" => $idNews))) {
-            $result = $request->fetchAll(PDO::FETCH_ASSOC)[0];
+            $result = $request->fetch(PDO::FETCH_ASSOC);
             return $result;
         } else {
             return null;
         }
-    } 
-    catch (Exeption $e) {
+    } catch (Exeption $e) {
         echo $e->getMessage();
         return null;
     }
@@ -74,18 +73,14 @@ function UpdatePost($idNews, $title, $description)
         $db = connectDb();
         $sql = "UPDATE news SET title = :title, description = :description, lastEditDate = :lastEditDate WHERE idNews = :idNews";
         $request = $db->prepare($sql);
-        if ($request->execute(array(
-            "title" => $title,
-            "description" => $description,
-            "lastEditDate" => strtotime("now"),
-            "idNews" => $idNews))) {
-            $result = $request->fetchAll(PDO::FETCH_ASSOC);
-            return $result;
+        $arrayToExecute = array("title" => $title, "description" => $description, "lastEditDate" => date('Y-m-d H:i:s', time()), "idNews" => $idNews);
+        if ($request->execute($arrayToExecute)) {
+            //return $request->fetchAll(PDO::FETCH_ASSOC);
+            return true;
         } else {
             return null;
         }
     } catch (Exeption $e) {
-
         echo $e->getMessage();
         return null;
     }

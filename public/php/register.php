@@ -10,11 +10,11 @@ require_once 'model/users.php';
 require_once 'model/flashMessage.php';
 
 $errors = array();
+$name = filter_input(INPUT_POST, 'name', FILTER_SANITIZE_STRING);
+$surname = filter_input(INPUT_POST, 'surname', FILTER_SANITIZE_STRING);
+$username = filter_input(INPUT_POST, 'username', FILTER_SANITIZE_STRING);
 
 if (filter_has_var(INPUT_POST, "submit")) {
-    $name = filter_input(INPUT_POST, 'name', FILTER_SANITIZE_STRING);
-    $surname = filter_input(INPUT_POST, 'surname', FILTER_SANITIZE_STRING);
-    $username = filter_input(INPUT_POST, 'username', FILTER_SANITIZE_STRING);
     $password = filter_input(INPUT_POST, 'password', FILTER_SANITIZE_STRING);
     $passwordValidation = filter_input(INPUT_POST, 'passwordValidation', FILTER_SANITIZE_STRING);
 

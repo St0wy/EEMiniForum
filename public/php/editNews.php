@@ -6,8 +6,8 @@
  * Edit and delete page for the news
  */
 
- if (session_status() !== PHP_SESSION_ACTIVE) {
-    session_start();
+if (session_status() !== PHP_SESSION_ACTIVE) {
+	session_start();
 }
 
 require_once 'model/news.php';
@@ -18,45 +18,43 @@ $idNews = filter_input(INPUT_GET, 'idNews', FILTER_VALIDATE_INT);
 $news = GetPostFromId($idNews);
 $user = $_SESSION["user"];
 
-if($user["idUser"] !== $news["idUser"]){
-    header("Location:main.php");
-    exit;
-}
+if (filter_has_var(INPUT_POST, "edit")) {
+	$title = filter_input(INPUT_POST, 'title', FILTER_SANITIZE_STRING);
+	$description = filter_input(INPUT_POST, 'description', FILTER_SANITIZE_STRING);
+	$idNews = filter_input(INPUT_POST, 'idNews', FILTER_VALIDATE_INT);
+	$news = GetPostFromId($idNews);
 
-if(filter_has_var(INPUT_POST, "edit")){
-    $title = filter_input(INPUT_POST, 'title', FILTER_SANITIZE_STRING);
-    $description = filter_input(INPUT_POST, 'description', FILTER_SANITIZE_STRING);
-    $idNews = filter_input(INPUT_POST, 'idNews', FILTER_VALIDATE_INT);
-    $news = GetPostFromId($idNews);
+	if ($user["idUser"] !== $news["idUser"]) {
+		header("Location:main.php");
+		exit;
+	}
 
-    if(empty($title)){
-        $errors["title"] = "Votre titre ne doit pas etre vide.";
-    }
-    else if(strlen($title)>50){
-        $errors["title"] = "Votre titre ne doit pas depasser 50 caracteres";
-    }
-    if(empty($description)){
-        $errors["description"] = "Votre description ne doit pas etre vide.";
-    }
-    else if(strlen($description)>250){
-        $errors["description"] = "Votre description ne doit pas depasser 250 caracteres";
-    }
-    if(empty($errors)){
-        if(UpdatePost($idNews, $news["title"], $news["description"])){
-            SetMessageFlash("Votre message a bien ete edite.");
-            header("Location:main.php");
-            exit;
-        }else{
-            $errors["sql"] = "Erreure pendant la sauvegarde";
-        }
-        
-    }
+	if (empty($title)) {
+		$errors["title"] = "Votre titre ne doit pas etre vide.";
+	} else if (strlen($title) > 50) {
+		$errors["title"] = "Votre titre ne doit pas depasser 50 caracteres";
+	}
+	if (empty($description)) {
+		$errors["description"] = "Votre description ne doit pas etre vide.";
+	} else if (strlen($description) > 250) {
+		$errors["description"] = "Votre description ne doit pas depasser 250 caracteres";
+	}
+	if (empty($errors)) {
+		if (UpdatePost($idNews, $title, $description)) {
+			SetMessageFlash("Votre message a bien ete edite.");
+			header("Location:main.php");
+			exit;
+		} else {
+			$errors["sql"] = "Erreur pendant la sauvegarde";
+		}
+
+	}
 }
 
 if ($action === "edit") {
-    include "views/editForm.php";
+	include "views/editForm.php";
 } else if ($action === "delete") {
-    include "views/deleteForm.php";
+	include "views/deleteForm.php";
 } else {
-    echo "Error";
+	echo "Error";
 }
