@@ -50,6 +50,29 @@ if (filter_has_var(INPUT_POST, "edit")) {
 
 	}
 }
+elseif (filter_has_var(INPUT_POST, "delete")) {
+	$title = filter_input(INPUT_POST, 'title', FILTER_SANITIZE_STRING);
+	$description = filter_input(INPUT_POST, 'description', FILTER_SANITIZE_STRING);
+	$idNews = filter_input(INPUT_POST, 'idNews', FILTER_VALIDATE_INT);
+	$news = GetPostFromId($idNews);
+
+	if ($user["idUser"] !== $news["idUser"]) {
+		header("Location:main.php");
+		exit;
+	}
+
+	if (DeletePost($idNews, $title, $description)) {
+		SetMessageFlash("Votre message a bien ete supprime.");
+		header("Location:main.php");
+		exit;
+	} else {
+		$errors["sql"] = "Erreur pendant la suppression";
+	}
+}
+elseif (filter_has_var(INPUT_POST, "cancel")) {
+	header("Location:main.php");
+	exit;
+}
 
 if ($action === "edit") {
 	include "views/editForm.php";
