@@ -1,9 +1,15 @@
 <?php
 /**
- * views\confirmationPage.php
- * @author Fabian Huber
- * 31.08.2018
- * View of the confirmation
+ * Confirmation form for the confirmation page.
+ * php\confirmation.php
+ *
+ * PHP Version 7.2.10
+ *
+ * @category File
+ * @package  File
+ * @author   Fabian Huber <fabian.hbr@eduge.ch>
+ * @license  http://opensource.org/licenses/gpl-license.php GNU Public License
+ * @link     http://127.0.0.1/MiniForum/public/php/confirmation.php
  */
 
 $pageTitle = "Confirmation";

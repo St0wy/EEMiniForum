@@ -1,17 +1,23 @@
 <?php
 /**
- * php\model\user.php
- * @author Fabian Huber
- * 31.08.2018
- * fonctions de gestions de la table users
+ * Fonctions de gestions de la table users.
+ * php\model\users.php
+ *
+ * PHP Version 7.2.10
+ *
+ * @category File
+ * @package  File
+ * @author   Fabian Huber <fabian.hbr@eduge.ch>
+ * @license  http://opensource.org/licenses/gpl-license.php GNU Public License
+ * @link     http://127.0.0.1/MiniForum/public/php
  */
 
 require_once 'dbconnection.php';
 
 /**
- * récupère tous les enregistrements de la table usersA
- * Les données à récupérer sont l'id, le nom, le prénom, le pseudo, la date d'enregistrement et le statut admin
- * @return array tableau contenant les enregistrements
+ * Get all the users.
+ *
+ * @return void
  */
 function getUsers()
 {
@@ -24,12 +30,13 @@ function getUsers()
 }
 
 /**
- * retourne les données de l'enregistrement idUser
- * Les données à récupérer sont l'id, le nom, le prénom, le pseudo, la date d'enregistrement et le statut admin
- * @param string $login login de l'utilsateur dont on veut le détail
- * @return array|NULL
+ * Get the user with the good login.
+ *
+ * @param mixed $login Login of the user.
+ *
+ * @return void
  */
-function GetUserFromLogin($login)
+function getUserFromLogin($login)
 {
     $db = connectDb();
     $sql = "SELECT idUser, login, name, surname FROM users WHERE login = :login";
@@ -40,12 +47,13 @@ function GetUserFromLogin($login)
 }
 
 /**
- * retourne les données de l'enregistrement idUser
- * Les données à récupérer sont l'id, le nom, le prénom, le pseudo, la date d'enregistrement et le statut admin
- * @param string $idUSer ID de l'utilsateur dont on veut le détail
- * @return array|NULL
+ * Get the user with the good id.
+ *
+ * @param mixed $idUser Id of the user you want to get.
+ *
+ * @return void
  */
-function GetUserFromId($idUser)
+function getUserFromId($idUser)
 {
     $db = connectDb();
     $sql = "SELECT idUser, login, name, surname FROM users WHERE idUser = :idUser";
@@ -56,26 +64,32 @@ function GetUserFromId($idUser)
 }
 
 /**
- * ajoute un enregistrement à la table users
- * @param string $surname nom de la personne
- * @param string $name prénom de la personne
- * @param string $login pseudo de l'utilisateur
- * @param string $password Mot de passe en clair de l'utilisateur
- * @return int numéro de l'enregistrement créé
+ * Add the user to the table.
+ *
+ * @param mixed $surname  Surname of the new user.
+ * @param mixed $name     Name of the new user.
+ * @param mixed $login    Login of the new user.
+ * @param mixed $password Password of the new user.
+ *
+ * @return void
  */
 function addUser($surname, $name, $login, $password)
 {
     if (!userExist($login)) {
         try {
             $db = connectDb();
-            $sql = "INSERT INTO users (surname, name, login, password) VALUES (:surname, :name, :login, :password)";
+            $sql = "INSERT INTO users (surname, name, login, password) " . 
+            "VALUES (:surname, :name, :login, :password)";
             $request = $db->prepare($sql);
-            if ($request->execute(array(
-                'surname' => $surname,
-                'name' => $name,
-                'login' => $login,
-                'password' => sha1($password),
-            ))) {
+            if ($request->execute(
+                array(
+                    'surname' => $surname,
+                    'name' => $name,
+                    'login' => $login,
+                    'password' => password_hash($password, PASSWORD_DEFAULT),
+                )
+            )
+            ) {
                 return $db->lastInsertId();
             } else {
                 return null;
@@ -89,6 +103,13 @@ function addUser($surname, $name, $login, $password)
     return $request->fetch();
 }
 
+/**
+ * Check if the user exist.
+ *
+ * @param mixed $login Login of the user you want to check existence.
+ *
+ * @return void
+ */
 function userExist($login)
 {
     try {
@@ -112,24 +133,30 @@ function userExist($login)
 }
 
 /**
- * Vérifie si les données passée en paramètres correspondent à un utilisateur ou non
- * @param string $pseudo Le pseudo à vérifier
- * @param string $pwd Le mot de passe à vérifier
- * @return mixed Soit un tableau avec le profil de l'utilisateur,
- *               Soit false si l'identification n'a pas pu être vérifiée
+ * Check if the user typed the good login and password
+ *
+ * @param mixed $login    Login of the user.
+ * @param mixed $password Password of the user.
+ *
+ * @return void
  */
 function checkUserIdentification($login, $password)
 {
+    $logged = false;
     $db = connectDb();
-    $sql = "SELECT idUser, login, name, surname FROM users WHERE login = :login AND password = :password";
-
-    $request = $db->prepare($sql);
-    if ($request->execute(array(
-        'login' => $login,
-        'password' => sha1($password)))) {
-        $result = $request->fetch(PDO::FETCH_ASSOC);
-        return $result;
+    $sqlPassword = "SELECT password FROM users WHERE login = :login";
+    $request = $db->prepare($sqlPassword);
+    $arrayToExecute = array('login' => $login);
+    if ($request->execute($arrayToExecute)) {
+        $hashedPassword = $request->fetch(PDO::FETCH_ASSOC);
+        if (password_verify($password, $hashedPassword)) {
+            $logged = true;
+        } else {
+            $logged = false;
+        }
     } else {
-        return null;
+        $logged = false;
     }
+
+    return $logged;
 }

@@ -1,9 +1,15 @@
 <?php
 /**
- * register.php
- * @author Fabian Huber
- * 30.08.2018
- * Registration page
+ * Page to register.
+ * php\register.php
+ *
+ * PHP Version 7.2.10
+ *
+ * @category File
+ * @package  File
+ * @author   Fabian Huber <fabian.hbr@eduge.ch>
+ * @license  http://opensource.org/licenses/gpl-license.php GNU Public License
+ * @link     http://127.0.0.1/MiniForum/public/php/regiser.php
  */
 
 require_once 'model/users.php';
@@ -16,10 +22,15 @@ $username = filter_input(INPUT_POST, 'username', FILTER_SANITIZE_STRING);
 
 if (filter_has_var(INPUT_POST, "submit")) {
     $password = filter_input(INPUT_POST, 'password', FILTER_SANITIZE_STRING);
-    $passwordValidation = filter_input(INPUT_POST, 'passwordValidation', FILTER_SANITIZE_STRING);
+    $passwordValidation = filter_input(
+        INPUT_POST, 
+        'passwordValidation', 
+        FILTER_SANITIZE_STRING
+    );
 
     if ($password != $passwordValidation) {
-        $errors["register"]["password"] = "Le mot de passe et sa validation de sont pas identiques.";
+        $errors["register"]["password"] = "Le mot de passe et sa validation " . 
+        "de sont pas identiques.";
     }
     if (strlen($name) <= 0) {
         $errors["register"]["name"] = "Vous devez donner un prenom.";
@@ -32,7 +43,8 @@ if (filter_has_var(INPUT_POST, "submit")) {
         $errors["register"]["username"] = "Vous devez donner un identifiant.";
         $username = "";
     } else if (strlen($username) > 50) {
-        $errors["register"]["username"] = "Le pseudo ne doit pas depasser 50 caractere.";
+        $errors["register"]["username"] = "Le pseudo ne doit pas depasser 50 " . 
+        "caractere.";
         $username = "";
     }
     if (strlen($surname) <= 0) {
@@ -44,7 +56,8 @@ if (filter_has_var(INPUT_POST, "submit")) {
     }
     if (empty($errors["register"])) {
         if (empty(addUser($surname, $name, $username, $password))) {
-            $errors["register"]["sql"] = "Probleme avec l'enregistrement de l'utilisateur.";
+            $errors["register"]["sql"] = "Probleme avec l'enregistrement de " . 
+            "l'utilisateur.";
         } else {
             SetMessageFlash("Vous etes bien inscrits");
             header("location:index.php");
@@ -54,4 +67,4 @@ if (filter_has_var(INPUT_POST, "submit")) {
 
 }
 
-include 'views/registerForm.php';
+require 'views/registerForm.php';

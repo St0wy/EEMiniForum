@@ -1,9 +1,15 @@
 <?php
 /**
+ * Index and login form.
  * php\index.php
- * @author Fabian Huber
- * 30.08.2018
- * Connection page
+ *
+ * PHP Version 7.2.10
+ *
+ * @category File
+ * @package  File
+ * @author   Fabian Huber <fabian.hbr@eduge.ch>
+ * @license  http://opensource.org/licenses/gpl-license.php GNU Public License
+ * @link     http://127.0.0.1/MiniForum/public/php/index.php
  */
 
 if (session_status() !== PHP_SESSION_ACTIVE) {
@@ -17,16 +23,14 @@ $errors = array();
 if (filter_has_var(INPUT_POST, "submit")) {
     $username = filter_input(INPUT_POST, 'username', FILTER_SANITIZE_STRING);
     $password = filter_input(INPUT_POST, 'password', FILTER_SANITIZE_STRING);
-	
-	$result = checkUserIdentification($username, $password);
-    if (empty($result)) {
-		$errors['login'] = 'Identification ou mot de passe invalide';
+
+    if (checkUserIdentification($username, $password)) {
+        $errors["login"] = 'Identification ou mot de passe invalide';
     } else {
-        $_SESSION['user'] = $result;
+        $_SESSION["user"]["username"] = $username;
         header("location:confirmation.php");
         exit;
     }
 }
 
-include 'views/loginForm.php';
-
+require 'views/loginForm.php';
